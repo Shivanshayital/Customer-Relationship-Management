@@ -10,5 +10,7 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
+      - key: PORT
+        value: 10000
       - key: CORS_ORIGIN
-        value: https://customer-relationship-management-rho.vercel.app
+        value: https://customer-relationship-management.vercel.app,https://ai-app-compiler.vercel.app
