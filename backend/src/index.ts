@@ -3,10 +3,17 @@ import cors from 'cors';
 import { compileApp, runEvaluation } from './pipeline/compiler.js';
 
 const app = express();
-const allowedOrigins = (process.env.CORS_ORIGIN ?? 'http://localhost:3000')
+const defaultAllowedOrigins = [
+  'http://localhost:3000',
+  'https://frontend-shivansh-projects.vercel.app',
+  'https://frontend-ten-lemon-20.vercel.app',
+  'https://frontend-lb8emtzvi-shivansh-projects.vercel.app',
+];
+const configuredAllowedOrigins = (process.env.CORS_ORIGIN ?? '')
   .split(',')
   .map((origin) => origin.trim())
   .filter(Boolean);
+const allowedOrigins = Array.from(new Set([...defaultAllowedOrigins, ...configuredAllowedOrigins]));
 
 const PORT = Number(process.env.PORT) || 4000;
 const nodeEnv = process.env.NODE_ENV ?? 'development';
