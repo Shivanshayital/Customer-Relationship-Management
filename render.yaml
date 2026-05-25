@@ -14,4 +14,4 @@ services:
       - key: PORT
         value: 10000
       - key: CORS_ORIGIN
-        value: https://customer-relationship-management.vercel.app,https://ai-app-compiler.vercel.app
+        value: https://frontend-shivansh-projects.vercel.app,https://frontend-ten-lemon-20.vercel.app,https://frontend-lb8emtzvi-shivansh-projects.vercel.app,https://customer-relationship-management.vercel.app,https://ai-app-compiler.vercel.app

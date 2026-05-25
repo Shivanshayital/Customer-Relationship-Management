@@ -25,10 +25,18 @@ test('compileApp repairs contradictory payment and auth prompts deterministicall
   assert.equal(result.repair_summary.preserved_modules.includes('ui_schema'), true);
 });
 
+test('compileApp repairs checkout without login phrasing', async () => {
+  const result = await compileApp('Users can checkout without login but login is mandatory');
+
+  assert.equal(result.validation.overall_status, 'repair_required');
+  assert.equal(result.validation.repaired, true);
+  assert.ok(result.repair_logs.some((log) => log.includes('guest checkout')));
+});
+
 test('runEvaluation returns dashboard metrics', async () => {
   const metrics = await runEvaluation();
 
-  assert.equal(metrics.total_prompts, 20);
+  assert.equal(metrics.total_prompts, 21);
   assert.ok(metrics.success_rate >= 0);
   assert.ok(metrics.validation_failures >= 0);
   assert.ok(metrics.repaired_failures >= 0);

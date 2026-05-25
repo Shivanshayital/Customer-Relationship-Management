@@ -11,11 +11,20 @@ function normalizePrompt(prompt: string) {
   return prompt.toLowerCase();
 }
 
+function hasGuestCheckoutConflict(normalized: string) {
+  const allowsUnauthenticatedCheckout =
+    normalized.includes('checkout as guests') ||
+    normalized.includes('checkout without login') ||
+    normalized.includes('checkout without logging in');
+
+  return allowsUnauthenticatedCheckout && normalized.includes('login is mandatory');
+}
+
 export function detectPromptFailures(prompt: string): FailureIssue[] {
   const normalized = normalizePrompt(prompt);
   const issues: FailureIssue[] = [];
 
-  if (normalized.includes('checkout as guests') && normalized.includes('login is mandatory')) {
+  if (hasGuestCheckoutConflict(normalized)) {
     issues.push({
       layer: 'constraints',
       severity: 'error',

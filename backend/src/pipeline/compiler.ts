@@ -82,9 +82,18 @@ function addGuestCheckoutRule(auth: ModuleSet['auth']) {
   };
 }
 
+function hasGuestCheckoutConflict(normalized: string) {
+  const allowsUnauthenticatedCheckout =
+    normalized.includes('checkout as guests') ||
+    normalized.includes('checkout without login') ||
+    normalized.includes('checkout without logging in');
+
+  return allowsUnauthenticatedCheckout && normalized.includes('login is mandatory');
+}
+
 function applyPromptSpecificRepairs(prompt: string, modules: ModuleSet, repairLogs: string[]) {
   const normalized = prompt.toLowerCase();
-  if (normalized.includes('checkout as guests') && normalized.includes('login is mandatory')) {
+  if (hasGuestCheckoutConflict(normalized)) {
     modules.auth = addGuestCheckoutRule(modules.auth);
     repairLogs.push('[Repair] auth_config: guest checkout rules restored and login made optional for checkout flow');
   }
@@ -314,6 +323,7 @@ export async function runEvaluation() {
     'Conflicting prompt: no login but requires secure access.',
     'Underspecified app with unclear roles.',
     'Users can checkout as guests but login is mandatory.',
+    'Users can checkout without login but login is mandatory.',
     'Managers can delete invoices but invoices are immutable.',
     'Premium users have free access but payment is required.',
     'Create a finance app with login and analytics.',

@@ -5,3 +5,5 @@ backend/data/
 tools/
 *.log
 .DS_Store
+.vercel/
+.vercel-cli-home/
